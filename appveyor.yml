@@ -40,12 +40,9 @@ build: false  # Not a C# project, build stuff at the test step instead.
 test_script:
   # Build the compiled extension and run the project tests
   - "%CMD_IN_ENV% py.test"
-
-on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
   # wheel should be available.
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
-  - ps: "ls dist"
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
