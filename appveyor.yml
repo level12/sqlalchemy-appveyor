@@ -19,7 +19,10 @@ environment:
       PYTHON_VERSION: "3.4.3"
       PYTHON_ARCH: "32"
       TOX_ENV_BASE: py34
-
+branches:
+  only:
+    # our appveyor branch will track the latest SQLALchemy release
+    - appveyor
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
