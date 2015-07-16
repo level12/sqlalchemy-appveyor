@@ -39,15 +39,17 @@ install:
 
 build: false  # Not a C# project, build stuff at the test step instead.
 
-before_test:
+test_script:
+  # comment out the real tests for now since they fail and cause the artifacts to not get sent
+  # out.
+  #- "%CMD_IN_ENV% py.test"
+  - "%CMD_IN_ENV% python --version"
+
+after_test:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
   # wheel should be available.
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - ps: "ls dist"
-
-test_script:
-  #- "%CMD_IN_ENV% py.test"
-  - "%CMD_IN_ENV% python --version"
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
