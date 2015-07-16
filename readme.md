@@ -25,5 +25,5 @@ tracker.
 
 [badge]: https://ci.appveyor.com/api/projects/status/github/level12/sqlalchemy-appveyor
 [upstream]: https://github.com/zzzeek/sqlalchemy
-[project]: https://ci.appveyor.com/project/rsyring16783/sqlalchemy-appveyor
+[project]: https://ci.appveyor.com/project/rsyring/sqlalchemy-appveyor
 [level12]: https://www.level12.io/
