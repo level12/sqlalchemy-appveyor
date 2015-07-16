@@ -34,23 +34,20 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
   - "%CMD_IN_ENV% pip install wheel pytest mock"
-  # I'm hoping this results in building the compiled extension.
-  - "%CMD_IN_ENV% pip install -e ."
 
-build: false  # Not a C# project, build stuff at the test step instead.
+# Not a C# project, build stuff at the test step instead.
+build:
+  false
 
 test_script:
   # comment out the real tests for now since they fail and cause the artifacts to not get sent
   # out.
   #- "%CMD_IN_ENV% py.test"
-  - "%CMD_IN_ENV% python --version"
+  - "%CMD_IN_ENV% should-fail"
 
-after_test:
+on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
   # wheel should be available.
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - ps: "ls dist"
-
-artifacts:
-  # Archive the generated wheel package in the ci.appveyor.com build report.
-  - path: dist\*
+  - "appveyor PushArtifact dist\*"
