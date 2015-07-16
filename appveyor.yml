@@ -34,6 +34,7 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
   - "%CMD_IN_ENV% pip install wheel pytest mock"
+  # I'm hoping this results in building the compiled extension.
   - "%CMD_IN_ENV% pip install -e ."
 
 build: false  # Not a C# project, build stuff at the test step instead.
@@ -45,7 +46,6 @@ before_test:
   - ps: "ls dist"
 
 test_script:
-  # Build the compiled extension and run the project tests
   #- "%CMD_IN_ENV% py.test"
   - "%CMD_IN_ENV% python --version"
 
