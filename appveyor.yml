@@ -5,7 +5,7 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
     SQL_SERVER: 127.0.0.1
-    SQL_PASS: "Password12!"
+    SQL_PASS: f1frj5UA7OQx6BRyhBiE
 
   matrix:
 
@@ -50,6 +50,7 @@ before_test:
   # setup and start the db server
   - ps: appveyor\mssql-server-setup.ps1 %SQL_PASS%
   # prep the SQL Server DB
+  - sqlcmd -S %SQL_SERVER% -E -Q "alter login sa with password = '%SQL_PASS%', check_policy = OFF"
   - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "create database satest"
   - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "alter database satest set allow_snapshot_isolation on"
   - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "alter database satest set read_committed_snapshot on"
