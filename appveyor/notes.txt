@@ -1,0 +1,10 @@
+# helpful when you need to RDP into the worker to try things
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+# you can paste this into a command prompt once RDP'd in to run the tests
+SET PYTHON=C:\Python27
+SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+SET TOXENV=py27
+cd c:\projects\sqlalchemy-appveyor
+tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:f1frj5UA7OQx6BRyhBiE@localhost/satest"

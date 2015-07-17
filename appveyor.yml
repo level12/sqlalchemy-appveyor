@@ -4,9 +4,7 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
-    # use the IP instead of "localhost" to avoid potential problems with localhost pointing to IP6
-    # address.
-    SQL_SERVER: 127.0.0.1
+    SQL_SERVER: localhost
     SQL_PASS: f1frj5UA7OQx6BRyhBiE
 
   matrix:
@@ -62,11 +60,8 @@ test_script:
   - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:%SQL_PASS%@%SQL_SERVER%/satest"
 
 on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
-#on_finish:
-#  # Always build the wheel since even with failing tests, we can assume if SA has released the
-#  # wheel should be available.
-#  - "%CMD_IN_ENV% python setup.py bdist_wheel"
-#  - ps: "ls dist"
-#  - ps: Get-ChildItem dist\*.whl | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  # Always build the wheel since even with failing tests, we can assume if SA has released the
+  # wheel should be available.
+  - "%CMD_IN_ENV% python setup.py bdist_wheel"
+  - ps: "ls dist"
+  - ps: Get-ChildItem dist\*.whl | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
