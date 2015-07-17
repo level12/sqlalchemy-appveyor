@@ -4,14 +4,14 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+    # use the IP instead of "localhost" to avoid potential problems with localhost pointing to IP6
+    # address.
     SQL_SERVER: 127.0.0.1
     SQL_PASS: f1frj5UA7OQx6BRyhBiE
 
   matrix:
-
     # Pre-installed Python versions, which Appveyor may upgrade to
     # a later point release.
-
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.9"
       PYTHON_ARCH: "32"
@@ -40,6 +40,7 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
+  # install dependencies
   - "%CMD_IN_ENV% pip install wheel pytest mock tox pymssql"
   
 # Not a C# project, so we don't use build
@@ -48,18 +49,20 @@ build:
 
 before_test:
   # setup and start the db server
-  - ps: appveyor\mssql-server-setup.ps1 %SQL_PASS%
-  # prep the SQL Server DB
+  #- ps: appveyor\mssql-server-setup.ps1
+  # have to change the password b/c the default password has a "!" in it and that gets swallowed
+  # somehow in the call to Tox.
   - sqlcmd -S %SQL_SERVER% -E -Q "alter login sa with password = '%SQL_PASS%', check_policy = OFF"
-  - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "create database satest"
-  - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "alter database satest set allow_snapshot_isolation on"
-  - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "alter database satest set read_committed_snapshot on"
+  # prep the SQL Server DB
+  - sqlcmd -S %SQL_SERVER% -E -Q "create database satest"
+  - sqlcmd -S %SQL_SERVER% -E -Q "alter database satest set allow_snapshot_isolation on"
+  - sqlcmd -S %SQL_SERVER% -E -Q "alter database satest set read_committed_snapshot on"
 
 test_script:
   - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:%SQL_PASS%@%SQL_SERVER%/satest"
 
-#on_finish:
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 #on_finish:
 #  # Always build the wheel since even with failing tests, we can assume if SA has released the
