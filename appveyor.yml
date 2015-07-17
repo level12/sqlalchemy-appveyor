@@ -50,7 +50,7 @@ before_test:
   - ps: appveyor\mssql-server-setup.ps1
   # have to change the password b/c the default password has a "!" in it and that gets swallowed
   # somehow in the call to Tox.
-  - sqlcmd -S %SQL_SERVER% -E -Q "alter login sa with password = '%SQL_PASS%', check_policy = OFF"
+  - sqlcmd -S %SQL_SERVER% -U -P %SQL_PASS% -Q "alter login sa with password = '%SQL_PASS%', check_policy = OFF"
   # prep the SQL Server DB
   - sqlcmd -S %SQL_SERVER% -E -Q "create database satest"
   - sqlcmd -S %SQL_SERVER% -E -Q "alter database satest set allow_snapshot_isolation on"
