@@ -27,3 +27,6 @@ $TCP.alter()
 # Start services
 Set-Service SQLBrowser -StartupType Manual
 Start-Service "MSSQL`$$instanceName"
+
+# wait a bit for the service to start to avoid login errors
+Start-Sleep -s 10
