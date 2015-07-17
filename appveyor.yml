@@ -4,7 +4,8 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
-    SQL_SERVER: localhost
+    # use the IP instead of "localhost" to avoid problems with "localhost" pointing to ::1.
+    SQL_SERVER: 127.0.0.1
     SQL_PASS: f1frj5UA7OQx6BRyhBiE
 
   matrix:
