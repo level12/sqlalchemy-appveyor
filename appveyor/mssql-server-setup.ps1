@@ -1,3 +1,7 @@
+[reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo") | Out-Null
+[reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.SqlWmiManagement") | Out-Null
+
+
 # Source: http://geekswithblogs.net/TedStatham/archive/2014/06/13/setting-the-ports-for-a-named-sql-server-instance-using.aspx
 # Set the $instanceName value below to the name of the instance you
 # want to configure a static port for. This could conceivably be
