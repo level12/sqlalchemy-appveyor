@@ -26,7 +26,7 @@ $loopback.IPAddressProperties["TcpDynamicPorts"].Value = ""
 $loopback.IPAddressProperties["TcpPort"].Value = "1433"
 $loopback.IPAddressProperties["Enabled"].Value = $true
 
-$loopbackv6 = $Tcp.IPAddresses | ? {$_.IPAddress -eq "127.0.0.1"}
+$loopbackv6 = $Tcp.IPAddresses | ? {$_.IPAddress -eq "::1"}
 $loopbackv6.IPAddressProperties["TcpDynamicPorts"].Value = ""
 $loopbackv6.IPAddressProperties["TcpPort"].Value = "1433"
 $loopbackv6.IPAddressProperties["Enabled"].Value = $true
