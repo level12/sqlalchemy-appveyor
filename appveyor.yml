@@ -49,7 +49,7 @@ build:
   false
 
 test_script:
-  - "%CMD_IN_ENV% tox --db sqlite --dburi=mssql+pymssql://sa:Password12!@localhost\SQL2008R2SP2/satest"
+  - "%CMD_IN_ENV% tox --db sqlite --dburi=mssql+pymssql://sa:Password12!@localhost\\SQL2008R2SP2/satest"
 
 on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
