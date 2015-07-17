@@ -24,6 +24,9 @@ branches:
     # our appveyor branch will track the latest SQLALchemy release
     - appveyor
 
+#services:
+#  - mssql2008r2sp2
+
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -34,14 +37,14 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  - "%CMD_IN_ENV% pip install wheel pytest mock"
+  - "%CMD_IN_ENV% pip install wheel pytest mock tox"
 
 # Not a C# project, so we don't use build
 build:
   false
 
 test_script:
-  - "%CMD_IN_ENV% tox"
+  - "%CMD_IN_ENV% tox" #mssql+pymssql://rrsrepo:rrsrepo@loftex-win/RRSRepoDev
 
 on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
