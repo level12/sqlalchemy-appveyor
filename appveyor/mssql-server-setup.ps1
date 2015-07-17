@@ -62,6 +62,6 @@ Write-Host $env.SQL_PASS
 $SQLUser.PasswordPolicyEnforced = 0;
 $SQLUser.Alter();
 $SQLUser.Refresh();
-$SQLUser.ChangePassword($env.SQL_PASS);
+$SQLUser.ChangePassword($args[0]);
 $SQLUser.Alter();
 $SQLUser.Refresh();

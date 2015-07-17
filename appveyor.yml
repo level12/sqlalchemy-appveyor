@@ -48,7 +48,7 @@ build:
 
 before_test:
   # setup and start the db server
-  - ps: appveyor\mssql-server-setup.ps1
+  - ps: appveyor\mssql-server-setup.ps1 %SQL_PASS%
   # prep the SQL Server DB
   - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "create database satest"
   - sqlcmd -S %SQL_SERVER% -U sa -P %SQL_PASS% -Q "alter database satest set allow_snapshot_isolation on"
