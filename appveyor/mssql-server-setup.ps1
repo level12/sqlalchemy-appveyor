@@ -14,12 +14,22 @@ $wmi = New-Object ($smo + 'Wmi.ManagedComputer')
 $uri = "ManagedComputer[@Name='$serverName']/ServerInstance[@Name='$instanceName']/ServerProtocol[@Name='Tcp']"
 $Tcp = $wmi.GetSmoObject($uri)
 $Tcp.IsEnabled = $true
-$TCP.alter()
 
-# Configure IPAll setting so SQL Server listens on 1433 on all IP address and doesn't use dynamic ports
+# Configure IPAll setting so dynamic ports are not used
 $IPAllProps = $wmi.GetSmoObject($uri + "/IPAddress[@Name='IPAll']").IPAddressProperties
 $IPAllProps["TcpDynamicPorts"].Value = ""
-$IPAllProps["TcpPort"].Value = "1433"
+
+# Only listen on the loopback addresses
+$Tcp.ProtocolProperties["ListenOnAllIPs"].Value = $false
+$loopback = $Tcp.IPAddresses | ? {$_.IPAddress -eq "127.0.0.1"}
+$loopback.IPAddressProperties["TcpDynamicPorts"].Value = ""
+$loopback.IPAddressProperties["TcpPort"].Value = "1433"
+$loopback.IPAddressProperties["Enabled"].Value = $true
+
+$loopbackv6 = $Tcp.IPAddresses | ? {$_.IPAddress -eq "127.0.0.1"}
+$loopbackv6.IPAddressProperties["TcpDynamicPorts"].Value = ""
+$loopbackv6.IPAddressProperties["TcpPort"].Value = "1433"
+$loopbackv6.IPAddressProperties["Enabled"].Value = $true
 
 # apply changes
 $TCP.alter()
