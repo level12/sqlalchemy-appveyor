@@ -7,21 +7,15 @@
 # want to configure a static port for. This could conceivably be
 # passed into the script as a parameter.
 $instanceName = 'SQL2008R2SP2'
-$computerName = $env:COMPUTERNAME
+$serverName = $env:COMPUTERNAME
 $smo = 'Microsoft.SqlServer.Management.Smo.'
 $wmi = New-Object ($smo + 'Wmi.ManagedComputer')
 
-# For the named instance, on the current computer, for the TCP protocol,
-# loop through all the IPs and configure them to use the standard port
-# of 1433.
-$uri = "ManagedComputer[@Name='$computerName']/ ServerInstance[@Name='$instanceName']/ServerProtocol[@Name='Tcp']"
+# Enable TCP/IP
+$uri = "ManagedComputer[@Name='$serverName']/ServerInstance[@Name='$instanceName']/ServerProtocol[@Name='Tcp']"
 $Tcp = $wmi.GetSmoObject($uri)
-foreach ($ipAddress in $Tcp.IPAddresses)
-{
-    $ipAddress.IPAddressProperties["TcpDynamicPorts"].Value = ""
-    $ipAddress.IPAddressProperties["TcpPort"].Value = "1433"
-}
-$Tcp.Alter()
+$Tcp.IsEnabled = $true
+$TCP.alter()
 
 # Start services
 Set-Service SQLBrowser -StartupType Manual

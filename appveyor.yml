@@ -27,6 +27,10 @@ branches:
 #services:
 #  - mssql2008r2sp2
 
+# Fetch repository as zip archive to speed up builds (due to SA's large history).
+shallow_clone:
+  true  
+
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
@@ -52,7 +56,7 @@ before_test:
   - sqlcmd -E -S "(local)\SQL2008R2SP2" -Q "alter database satest set read_committed_snapshot on"
 
 test_script:
-  - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:Password12!@localhost/satest"
+  - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:Password12!@localhost\\SQL2008R2SP2/satest"
 
 on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
