@@ -23,9 +23,9 @@ branches:
   only:
     # our appveyor branch will track the latest SQLALchemy release
     - appveyor
-
-services:
-  - mssql2008r2sp2
+#
+#services:
+#  - mssql2008r2sp2
 
 install:
   # Prepend newly installed Python to the PATH of this build (this cannot be
@@ -44,13 +44,15 @@ build:
   false
 
 before_test:
+  # setup and start the db server
+  - ps: appveyor\mssql-server-setup.ps1
   # prep the SQL Server DB
   - sqlcmd -E -S "(local)\SQL2008R2SP2" -Q "create database satest"
   - sqlcmd -E -S "(local)\SQL2008R2SP2" -Q "alter database satest set allow_snapshot_isolation on"
   - sqlcmd -E -S "(local)\SQL2008R2SP2" -Q "alter database satest set read_committed_snapshot on"
 
 test_script:
-  - "%CMD_IN_ENV% tox -- --db sqlite --dburi=mssql+pymssql://sa:Password12!@localhost\\SQL2008R2SP2/satest"
+  - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:Password12!@localhost\\SQL2008R2SP2/satest"
 
 on_finish:
   # Always build the wheel since even with failing tests, we can assume if SA has released the
