@@ -54,7 +54,7 @@ before_test:
   - sqlcmd -S %SQL_SERVER% -E -Q "alter login sa with password = '%SQL_PASS%', check_policy = OFF"
   # prep the SQL Server DB
   - sqlcmd -S %SQL_SERVER% -E -Q "create database satest"
-  - sqlcmd -S %SQL_SERVER% -E -Q "use satest; create schema test_schema"
+  - sqlcmd -S %SQL_SERVER% -E -d satest -Q "create schema test_schema"
   - sqlcmd -S %SQL_SERVER% -E -Q "alter database satest set allow_snapshot_isolation on"
   - sqlcmd -S %SQL_SERVER% -E -Q "alter database satest set read_committed_snapshot on"
 
