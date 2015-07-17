@@ -55,8 +55,8 @@ before_test:
 test_script:
   - "%CMD_IN_ENV% tox -- --dburi=sqlite:/// --dburi=mssql+pymssql://sa:Password12!@127.0.0.1/satest"
 
-#on_finish:
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 #on_finish:
 #  # Always build the wheel since even with failing tests, we can assume if SA has released the
