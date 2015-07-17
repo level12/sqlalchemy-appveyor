@@ -58,7 +58,7 @@ $srv = New-Object "Microsoft.SqlServer.Management.Smo.Server" $serverName
 
 #Find the SQL Server sa Login and Change the Password to something simple
 $SQLUser = $srv.Logins | ? {$_.Name -eq "sa"};
-Write-Host $env.SQL_PASS
+Write-Host $args[0]
 $SQLUser.PasswordPolicyEnforced = 0;
 $SQLUser.Alter();
 $SQLUser.Refresh();
