@@ -224,9 +224,6 @@ def testing_engine(url=None, options=None):
     if options is None:
         if config.db is None or url.drivername == config.db.url.drivername:
             options = config.db_opts
-            # Somehow legacy_schema_aliasing is getting added to options for sqlite connections.
-            if not url.drivername.startswith('mssql') and 'legacy_schema_aliasing' in options:
-                del options['legacy_schema_aliasing']
         else:
             options = {}
 
